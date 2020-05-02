@@ -64,6 +64,10 @@ WE've:
                        => So, lower the diff by 1       
 =>THIS WAY, We'll always ADJUST the difficulty
 
+key diff btn Bitcoin's DIFFICULTY sys and ours:
+=>Bitcoin checks for leading zer0's in 256 binary bits hash
+=> Our sys checks it on 64 characters Hexadecimal hash
+
 NOTE: GLOBAL values are set in config.js file
      
 
