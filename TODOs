@@ -1,0 +1,6 @@
+npm init
+
+npm install jest@23.6.0 --save-dev
+
+cat package.json =>to see the package.json to check if the package has actually been installed
+
