@@ -4,3 +4,5 @@ npm install jest@23.6.0 --save-dev
 
 cat package.json =>to see the package.json to check if the package has actually been installed
 
+SHA-256 => 256 for bits(0's and 1's) of hash
+        => equal to 64 Hexadecimal characters (0-9 and A-F)
