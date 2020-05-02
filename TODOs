@@ -6,3 +6,64 @@ cat package.json =>to see the package.json to check if the package has actually 
 
 SHA-256 => 256 for bits(0's and 1's) of hash
         => equal to 64 Hexadecimal characters (0-9 and A-F)
+        =>produces a unique value for unique input
+        => A one-way function(data -> hash)
+        =>[encryption is easy but decryption(hash -> data) is next to impossible]
+
+Proof of work in blockchain:
+Bitcoin: inspired by a system called HashCash(1997) 
+
+HashCash => originally developed to prevent the problem of email spamming
+    => any any point, there's going to be a level of difficulty in the system
+    =>depending upon this diff, one miner shall add a new block
+    =>they'll have to find a hash value for this block that matches the difficulty 
+    =>for matching, miners will have to find the same number of leading zeros as the current difficulty for the generated hash of the new block to add to the chain
+
+    =>becomes exponentially harder as the diff increases
+
+    =>nonce comes in play
+
+    =>generate new hashes by changing nonce values
+    =>takes decent amt of computational work
+
+    =>Thus, finding the nonce that unlocks a hash that meets the difficulty requirement is that very proof of work
+
+    NONCE: Number Used Once
+
+    NOTE: We're using Hexadecimal form of SHA-256 {rep in 64 characters}
+    BITCOIN uses BINARY form of the hash (rep in 256 binary(0 and 1) characters)
+
+    DIFFICULTY : no of leading 0 BITS(Binary format ma) in a 256 bit binary string
+
+    O=0 Once a miner has succesfully mined a block (found the correct nonce value), s/he has the rights to submit their block with the correctfound nonce value to other miners
+
+    0-0 Then the other miners can quickly verify the valid block and then add it to their own chain w/o having to redo the same computational work
+
+    Bitcoin adds a new block to the chain in every 10 minutes
+
+    =>> 51% attack : when a evil miner has 51% of the computational power of the whole blockchain ntk
+
+    =>> impossible because it COSTS TOO MUCH!
+    => as of the EOY 2018, it would cost more than $9 Billion to take over the entire ntk with 51% attack
+
+WE've:
+    => implemented Proof of work
+    => set dynamic difficulty and Mine Rate
+        [to adjust the blockchain diff level in order to bring the average rate of blocks being added mined closer to as set mining rate]
+    => by adding a diff attribute to each block
+    => in addition to this we've introduced a global time-value called the MINE_RATE
+    => MINE_RATE: reps the rate at which we want a block to be added to the chain
+
+>DIFFICULTY ADUSTMENT:
+=> check the timestamp of the new block which is being  mined
+=> compare it's timestamp with the last block
+=> calculate the diff btn the two timestamps
+=> if diff < MINE_RATE => the block was mined too quickly
+                       => So, raise the difficulty for the  next block by 1
+=> if diff > MINE_RATE => the block was mined too slowly
+                       => So, lower the diff by 1       
+=>THIS WAY, We'll always ADJUST the difficulty
+
+NOTE: GLOBAL values are set in config.js file
+     
+

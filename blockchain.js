@@ -40,11 +40,17 @@ class Blockchain {
 
       const actualLastHash = chain[i - 1].hash;
 
-      const { timestamp, lastHash, hash, data } = block;
+      const { timestamp, lastHash, hash, nonce, difficulty, data } = block;
 
       if (lastHash !== actualLastHash) return false;
 
-      const validatedHash = cryptoHash(timestamp, lastHash, data); //regenerating the hashes to compare | cryptoHash is a node module we've imported and set in "crypto-hash.js"
+      const validatedHash = cryptoHash(
+        timestamp,
+        lastHash,
+        data,
+        nonce,
+        difficulty
+      ); //regenerating the hashes to compare | cryptoHash is a node module we've imported and set in "crypto-hash.js"
 
       if (hash !== validatedHash) return false;
     }
