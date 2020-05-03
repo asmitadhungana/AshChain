@@ -68,6 +68,15 @@ key diff btn Bitcoin's DIFFICULTY sys and ours:
 =>Bitcoin checks for leading zer0's in 256 binary bits hash
 => Our sys checks it on 64 characters Hexadecimal hash
 
+==> WHICH WE CHANGED TO CHECK FOR BINARY HASHES (using hex-to-binary node module we added)
+
+TROUBLE encountered: due to dynamic difficulty setting, our system was vulnerable to hacker attacks to reset it according to them
+
+SOVED: => in isValidChain() mthd in `blockchain.js`, make a rule to make sure that the difficulty never adjusts by more than 1 for every adjacent blocks
+
 NOTE: GLOBAL values are set in config.js file
      
+
+INSTALL: npm i hex-to-binary@1.0.1 --save
+
 

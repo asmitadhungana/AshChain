@@ -40,6 +40,8 @@ class Blockchain {
 
       const actualLastHash = chain[i - 1].hash;
 
+      const lastDifficulty = chain[i - 1].difficulty;
+
       const { timestamp, lastHash, hash, nonce, difficulty, data } = block;
 
       if (lastHash !== actualLastHash) return false;
@@ -53,6 +55,8 @@ class Blockchain {
       ); //regenerating the hashes to compare | cryptoHash is a node module we've imported and set in "crypto-hash.js"
 
       if (hash !== validatedHash) return false;
+
+      if (Math.abs(lastDifficulty - difficulty > 1)) return false; //to prevent difficulty jumps from going too high or too low [which can be made by hackers]
     }
     return true;
   }
