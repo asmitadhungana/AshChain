@@ -161,6 +161,35 @@ ERROR: vd: 5.12
 DID => refactored the whole project directories
 
 
+CREATED: wallet.js
+=>made a Wallet class
+=>gave each wallet a starting balance of 1000
+
+4] TASK: CREATE the public key address to the wallet
+    => PROBLEM: can't just be a unique id and has to be based on a cryptographic private-public key pair
+    => SOLUTION: INSTALL "elliptic" module
+
+INSTALL: npm install elliptic@6.4.1 --save
+
+    Elliptic:
+    => a node module that has classes and fxns that enable elliptic curve-based cryptography.
+    =>Elliptic cryptography is an advanced mathematical subject
+    => Idea: It is computationally infeasible and impossibly expensive to guess the answer to a randomly generated elliptic curve
+    =>Look up for it online
+    => Look up =>how the key pairs are generated ; how the signatures are done; how they're verified
+
+    =>PUBLIC and PRIVATE key capablilities of Elliptic:
+
+    EC: elliptic cryptography
+
+    => CREATE: index.js in utils for this
+    => used EC('secp256k1) [this is the same algo used by Bitcoin [secp256k1]
+    =>sec: standards of efficient cryptography ; p: prime ; 256: 256 bits; k: mathematician's initials; 1: first implementation
+
+    NOTE: the keys we get from EC 's genKeyPair() are in the form of points in Ellipse
+    => we needa convert them to Hexadecimal form to be able to use them as addresses
+
+
 
 
 

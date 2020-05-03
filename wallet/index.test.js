@@ -1,4 +1,4 @@
-const Wallet = require("./index");
+const Wallet = require("./");
 
 describe("Wallet class", () => {
   let wallet;
@@ -12,6 +12,8 @@ describe("Wallet class", () => {
   });
 
   it("has a `publicKey`", () => {
+    console.log(wallet.publicKey);
+
     expect(wallet).toHaveProperty("publicKey");
   });
 });
