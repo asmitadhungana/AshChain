@@ -68,15 +68,94 @@ key diff btn Bitcoin's DIFFICULTY sys and ours:
 =>Bitcoin checks for leading zer0's in 256 binary bits hash
 => Our sys checks it on 64 characters Hexadecimal hash
 
+INSTALL: npm i hex-to-binary@1.0.1 --save
+
 ==> WHICH WE CHANGED TO CHECK FOR BINARY HASHES (using hex-to-binary node module we added)
 
 TROUBLE encountered: due to dynamic difficulty setting, our system was vulnerable to hacker attacks to reset it according to them
 
 SOVED: => in isValidChain() mthd in `blockchain.js`, make a rule to make sure that the difficulty never adjusts by more than 1 for every adjacent blocks
-
-NOTE: GLOBAL values are set in config.js file
      
+Part 4: BLOCKCHAIN API
 
-INSTALL: npm i hex-to-binary@1.0.1 --save
+=> Read the blockchain
+=> write to the blockchain
+
+INSTALL API: EXPRESS ()
+                        npm i express@4.16.3 --save
+
+will serve 2 main purposes:
+    => allow a frontned application to interact w/ the blockchain in order to read data abt the blockchain and also write data to the blockchain
+    => allow other blockchain backends to interact w/ each other
+
+We'll configure EXPRESS server to access various HTTP requests that'll be made over the web
+
+HTTP REQUESTS:
+    GET=> associated w/ reading data [to read the blocks of the blockchain]
+    POST => w/ sending data to the web server [to carry data to add new block to the chain consisting of that data]
+
+    GET:
+    //.get takes 2 instances("endpoint_on_the_server_where_we_want_this_req_to_be_located" ,   a_callback_fxn_which_aill_fire_when_this_get_req_is_used(request, response)=>{})
+    //res object allows us to define how we want this get request to respond 
+
+    POST: same as above
+    receives data from the user in json format
+
+
+Blockchain instances in the ntk=> can read each other's data and add new blocks to the chains if necessary
+
+ADDED: index.js file
+NOTE: in package.json, add a script: "start":"node index.js"
+
+COMMAND: npm run start
+INSTALL: npm i nodemon@1.18.4 --save-dev
+NOTE: in package.json, add a script: "dev":"nodemon index.js"
+
+INSTALL : npm i body-parser@1.18.3 --save
+
+Networking pattern used: PubSub [vd: 5.4]
+
+    PubSub=> Real-Time Messaging ntk 
+        => To  broadcast updates of a local bc to all the peers of the ntk
+        => Reduces a lot of work needed for alternative ntk implementations like "Tracking Socket Addresses" [often used in peer-peer ntks]
+        Tracking Socket Address:
+        =>In this ntk implementation, realtime socket cnnxns are open btn servers and each server has to maintain a list of peers it's made a connection with.
+        =>Whenever a msg broadcast needs to happen in the entire ntk btn all peers, that node needs to send a direct msg to every single peer that has kept track of in its list.
+        => It's a lot of work
+    
+    Blockchain Pub/Sub [ntk implementation used here]
+
+PubNub: used for this [vd: 5.9]
+
+$ npm i pubnub@4.21.6 —save
+
+=>make pubsub.js
+=> write code in it
+=> make an instance of it in index.js
+
+goto pubnub.com => login using dhun... gmail => create a new app => click on it=> get the keys => use it in pubsub.js
+
+=> For: Start Peers and Broadcast Chain on API Mine
+INSTALL Module: Cross-environment [vd: 5.11]
+$ npm i cross-env@5.2.0 --save-dev
+    ADD to package.json :"dev-peer" : "cross-env GENERATE_PEER_PORT='true' nodemon index.js"
+
+    =>helps us to set environment variables programmatically no matter what OS or Cmd Line Appn one is using
+    => develop precisely nodejs appns to work w/ environment variables no matter what machine one's using
+
+    =>to start and GENERATE PEER PORT command: npm run dev-peer 
+
+TASK: SYNC CHAINS on CONNECT
+
+INSTALL MODULE: request
+$ npm i request@2.88.0 --save
+
+    => gives us a fxn has the ability to send a http get request
+
+import it in index.js and use it
+
+ERROR: vd: 5.12
+
+
 
 
