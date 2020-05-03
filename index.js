@@ -2,7 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const request = require("request");
 const Blockchain = require("./blockchain");
-const PubSub = require("./pubsub");
+const PubSub = require("./app/pubsub");
 
 const app = express(); //make a local app object that's the result of calling this express fxn
 const blockchain = new Blockchain(); //create a main blockchain for the app [local blockchain instance set to that result]
