@@ -1,3 +1,5 @@
+const Transaction = require("./transaction");
+
 class TransactionPool {
   constructor() {
     this.transactionMap = {}; //maps a trnxn id to a trnxn object
@@ -19,6 +21,14 @@ class TransactionPool {
     return transactions.find(
       (transaction) => transaction.input.address === inputAddress
     );
+  }
+
+  validTransactions() {
+    //make use of the existing static validTransactions() mthd in the Transaction class imported above
+    //get an array of all the trnxns currently in the map
+    return Object.values(this.transactionMap).filter((transaction) =>
+      Transaction.validTransaction(transaction)
+    ); //this fxn will return false if a trnxn has been tampered with
   }
 }
 
