@@ -117,7 +117,7 @@ describe("Transaction", () => {
         originalSignature = transaction.input.signature;
         originalSenderOutput = transaction.outputMap[senderWallet.publicKey];
         nextRecipient = "next-recipient";
-        nextAmount = 50;
+        nextAmount = 100;
 
         transaction.update({
           senderWallet,
@@ -151,7 +151,7 @@ describe("Transaction", () => {
         let addedAmount;
 
         beforeEach(() => {
-          addedAmount = 80;
+          addedAmount = 50;
           transaction.update({
             senderWallet,
             recipient: nextRecipient,

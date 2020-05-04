@@ -247,6 +247,6 @@ vid:6.12 bata continue
          transactionMap[transactionId] = transaction (object)
 
 toBe() and toEqual() behave diff for objects
-we used toBe() coz we want the transaction in the pool to be the exact transaction obect we're passing into the fxn
+we used 
 
 

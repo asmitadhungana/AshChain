@@ -18,7 +18,7 @@ describe("TransactionPool", () => {
     it("adds a transaction", () => {
       transactionPool.setTransaction(transaction);
 
-      expect(transactionPool.transactionMap[transaction.id]).toBe(transaction);
+      expect(transactionPool.transactionMap[transaction.id]).toBe(transaction); //toBe() coz we want the transaction in the pool to be the exact transaction obect we're passing into the fxn
     });
   });
 });
