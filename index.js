@@ -67,7 +67,7 @@ app.get("/api/transaction-pool-map", (req, res) => {
 });
 
 //to sync the nodes in the ntk
-const syncChains = () => {
+const syncWithRootState = () => {
   request(
     { url: `${ROOT_NODE_ADDRESS}/api/blocks` },
     (error, response, body) => {
@@ -76,6 +76,22 @@ const syncChains = () => {
 
         console.log("replace chain on a sync with", rootChain);
         blockchain.replaceChain(rootChain);
+      }
+    }
+  );
+
+  //syncing transaction-pool-map
+  request(
+    { url: `${ROOT_NODE_ADDRESS}/api/transaction-pool-map` },
+    (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const rootTransactionPoolMap = JSON.parse(body); //200: suceess
+
+        console.log(
+          "replace transaction pool map on a sync with",
+          rootTransactionPoolMap
+        );
+        transactionPool.setMap(rootTransactionPoolMap);
       }
     }
   );
@@ -93,6 +109,6 @@ app.listen(PORT, () => {
 
   if (PORT !== DEFAULT_PORT) {
     //don't send the synchronization request to the root node itself
-    syncChains();
+    syncWithRootState();
   }
 });
