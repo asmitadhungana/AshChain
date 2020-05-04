@@ -30,6 +30,26 @@ class TransactionPool {
       Transaction.validTransaction(transaction)
     ); //this fxn will return false if a trnxn has been tampered with
   }
+
+  //for clearing the transaction pool after rewarding the miner for successful mining
+  clear() {
+    this.transactionMap = {};
+  }
+
+  //since all the transactions stored locally in the trnxn-pool of other nodes shouldn't be cleared
+  clearBlockchainTransactions({ chain }) {
+    //check wheather certain transactions have been recorded in the BC
+    for (let i = 1; i < chain.length; i++) {
+      const block = chain[i];
+
+      //wipe away those trnxns if they exist within their trnxn pool
+      for (let transaction of block.data) {
+        if (this.transactionMap[transaction.id]) {
+          delete this.transactionMap[transaction.id];
+        }
+      }
+    }
+  }
 }
 
 module.exports = TransactionPool;

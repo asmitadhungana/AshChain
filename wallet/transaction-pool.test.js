@@ -1,6 +1,7 @@
 const TransactionPool = require("./transaction-pool");
 const Transaction = require("./transaction");
 const Wallet = require("./index");
+const Blockchain = require("../blockchain");
 
 describe("TransactionPool", () => {
   let transactionPool, transaction, senderWallet;
@@ -74,6 +75,49 @@ describe("TransactionPool", () => {
     it("logs errors for the invalid transactions", () => {
       transactionPool.validTransactions();
       expect(errorMock).toHaveBeenCalled();
+    });
+  });
+
+  //to make sure that the trnsxn pool can be cleared
+  describe("clear()", () => {
+    it("clears the transactions", () => {
+      transactionPool.clear();
+
+      expect(transactionPool.transactionMap).toEqual({});
+    });
+  });
+
+  //it should clear only those trnxns in the trnxn pool if they're included in a new accepted blockchain
+  describe("clearBlockchainTransactions()", () => {
+    it("clears the pool of any existing blockchain transactions", () => {
+      const blockchain = new Blockchain(); //make a local BC
+      const expectedTransactionMap = {}; //and this
+
+      for (let i = 0; i < 6; i++) {
+        //everytime we make a unique trnxn
+        const transaction = new Wallet().createTransaction({
+          recipient: "ash",
+          amount: 10,
+        });
+
+        //and setting it to the pool
+        transactionPool.setTransaction(transaction);
+
+        //for half of the loop we're gonna add this block consisting of a data array to the local blockchain
+        if (i % 2 === 0) {
+          blockchain.addBlock({ data: [transaction] });
+        } else {
+          //for the other half, set these trnxns in the expected trnxn map
+          expectedTransactionMap[transaction.id] = transaction;
+        }
+      }
+
+      //call clearBlockchainTransactions()
+      transactionPool.clearBlockchainTransactions({ chain: blockchain.chain });
+
+      //the only trnxns that should remain in the pool even though we've set all the trnxns wihtin the pool itself,
+      //should be the trnxns in the expectedTransationMap
+      expect(transactionPool.transactionMap).toEqual(expectedTransactionMap);
     });
   });
 });
