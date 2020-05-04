@@ -10,7 +10,7 @@ const app = express(); //make a local app object that's the result of calling th
 const blockchain = new Blockchain(); //create a main blockchain for the app [local blockchain instance set to that result]
 const transactionPool = new TransactionPool();
 const wallet = new Wallet();
-const pubsub = new PubSub({ blockchain });
+const pubsub = new PubSub({ blockchain, transactionPool, wallet });
 
 const DEFAULT_PORT = 3000;
 const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
@@ -57,9 +57,13 @@ app.post("/api/transact", (req, res) => {
 
   transactionPool.setTransaction(transaction);
 
-  //pubsub.broadcastTransaction(transaction);
+  pubsub.broadcastTransaction(transaction);
 
   res.json({ type: "success", transaction });
+});
+
+app.get("/api/transaction-pool-map", (req, res) => {
+  res.json(transactionPool.transactionMap);
 });
 
 //to sync the nodes in the ntk

@@ -249,3 +249,35 @@ vid:6.12 bata continue
     [7.3] Created a Main Transaction Pool and allowed Transactions to be added through the API
         => whenever one wants to send some currency, they'll only have to make a POST request
         => whenever the transaction is created, it'll be added to the growing transaction pool for the application
+
+        => in the main index.js:
+            => import the transaction-pool file 
+            => make a local instance of the TransactionPool() in there
+
+            =>import the wallet
+            =>make a local instance of the Wallet() in there
+
+            =>that way, anytime we want to create a new transaction, we can use the
+                wallet.createTransaction() mthd
+            
+            make a new POST endpoint to create or generate transaction
+                /api/transact
+
+    [7.4] solved the bugs from the prev sxn:
+        BUGS: 1. the updates to the existing trnxn weren't working yet through the API
+              2. Invalid amount was causing a pretty ugly error to appear
+        [fixed 2]
+            
+    [7.5] fix transaction updates 
+
+        => introduced try{}catch(err){} block in the above endpoint
+        => created existingTransaction() mthd in transaction-pool.js
+
+    [7.6] create a transaction-pool-map get enpoint in main/index.js
+
+
+
+
+
+
+        
