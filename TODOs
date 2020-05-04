@@ -246,7 +246,6 @@ vid:6.12 bata continue
          
          transactionMap[transactionId] = transaction (object)
 
-toBe() and toEqual() behave diff for objects
-we used 
-
-
+    [7.3] Created a Main Transaction Pool and allowed Transactions to be added through the API
+        => whenever one wants to send some currency, they'll only have to make a POST request
+        => whenever the transaction is created, it'll be added to the growing transaction pool for the application
