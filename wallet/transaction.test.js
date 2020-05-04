@@ -1,6 +1,7 @@
 const Transaction = require("./transaction");
 const Wallet = require("./index");
 const { verifySignature } = require("../util");
+const { REWARD_INPUT, MINING_REWARD } = require("../config");
 
 describe("Transaction", () => {
   let transaction, senderWallet, recipient, amount;
@@ -171,6 +172,27 @@ describe("Transaction", () => {
           );
         });
       });
+    });
+  });
+
+  describe("rewardTransaction()", () => {
+    let rewardTransaction, minerWallet;
+
+    beforeEach(() => {
+      minerWallet = new Wallet();
+      rewardTransaction = Transaction.rewardTransaction({ minerWallet }); //rewardTransaction is gonna be a static fxn
+      //it's not gonna depend upon a specific wallet instance but gonna be more generic
+    });
+
+    it("creates a reward transaction with the reward input", () => {
+      expect(rewardTransaction.input).toEqual(REWARD_INPUT);
+    }); //if we look at the actual value of the rewardTransaction, and look at its i/p field, it should be equal to the overall REWARD_INPUT object
+
+    it("creates one transaction for the miner with the `MINING_REWARD`", () => {
+      //if we look at the actual value of the rT.opMap and we access the value for the miner's public key, it should be equal to the MINING_REWARD (imported above)
+      expect(rewardTransaction.outputMap[minerWallet.publicKey]).toEqual(
+        MINING_REWARD
+      );
     });
   });
 });
