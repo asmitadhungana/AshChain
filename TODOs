@@ -199,5 +199,54 @@ INSTALL: npm install elliptic@6.4.1 --save
 
 
 vid:6.12 bata continue
+    13]NOTE: js always treats [different references to the same object] as equal even thought it's property has changed in one of the references
+    => So it was producing the same hash using cryptohash() fxn for changed instances referenced to the same object(transaction) 
+    => so we made sure that the hash is unique for any object that has new properties
+    =>by stringifying each input inside an object and hashing them
+    => Now, hash was gen. using SHA-256 online generator for "ash" and lowercasing it[including the double quotes since our stringified version of input is hashed now in the real program]
+
+[[7]] TRANSACTION POOL
+
+    [7.1] The transaction pool is a data structure which is going to collect the transactions that are created by wallets throughout the ntk.
+    Implementation should satisfy 3 main purposes:
+    =>1. It collects a unique set of transaction objects
+    =>2. It could update already existing store transactions when a change has been submitted by a wallet.
+    =>3. It can rewrite multiple transactions in the inner collection.
+         wheather that means replacing the collection with an entirely new set or clearing the pool iteself with a handful or all of its transactions.
+    
+    HOW IS THIS TRANSACTION POOL GOING TO BE USED?
+        =>Every node in the ntk is gonna have their own instance of transaction pool.
+        => like the Blockchain, everyone is going to have their own running version of the pool.
+        => THE KEY is MAKING SURE that all of these transaction pools stay synchronized.
+
+        =>When one node creates a new transaction or updates an existing one, the transaction is going to have to be BROADCASTED to the ENTIRE NTK.
+        => Based on the TRANSACTION ID,
+            IF it's NEW=> it'll be added to each transaction pool 
+            If a transaction w/ that ID already exists=> it'll be updated 
+
+    SIGNIFICANCE:
+    =>It'll enable MINERS to get an accurate list of recent transactions in order to include them within the new block.
+    =>When looking to add a new block to the BC, a miner is going to use the trnxns in the pool as the data for a new block to mine.
+
+    [7.2] Create the TRANSACTION POOL object (in wallet folder)
+    => It'll collect transactions from various contributors over time in the overall blockchain ntk.
+
+    => Similar to the outputMap for a trnxn itself, we maintain the transaction pools's data through a
+    => MAP -like structure
+
+    =>Make an INNER MAP in the transaction pool called "transactionMap"
+    => MAP : a key-value structure
+     =>Benfit : storing unique items in the collection as long as you use the same key for that items every time
+        [Array doesn't immediately support these kinds of duplicates]
+    => If we set a trnxn by its ID within a transactionMap, everytime , when that trnxn is actually updated, it's going to overwrite its prev stored value within the trnxn map as long as we used that same trnxn ID  
+    
+    =>The primary way we're gonna add a trnxn is through a mthd called "setTransaction"
+        => It'll have 2 primary behaviours:
+         =>1. add a transaction by passing the transaction object, which it'll add to the transaction pool
+         
+         transactionMap[transactionId] = transaction (object)
+
+toBe() and toEqual() behave diff for objects
+we used toBe() coz we want the transaction in the pool to be the exact transaction obect we're passing into the fxn
 
 
