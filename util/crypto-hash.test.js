@@ -4,7 +4,7 @@ describe("cryptoHash()", () => {
   it("generates a SHA-256 hashed output", () => {
     expect(cryptoHash("ash")).toEqual(
       "15e105b2bf800a41d47f7310503b6975cc960457c3ebddd8d66954f2d1f5b970"
-    ); //hash was gen. using SHA-256 online generator for "ash" [including the double quotes since our stringified version of input is hashed now]
+    ); //hash was gen. using SHA-256 online generator for "ash" and lowercasing it[including the double quotes since our stringified version of input is hashed now]
   });
 
   it("produces the same hash with the same input arguments inputted in any order", () => {
