@@ -76,6 +76,29 @@ describe("Wallet class", () => {
         expect(transaction.outputMap[recipient]).toEqual(amount);
       });
     });
+
+    //when a chain is passed to the method
+    describe("and a chain is passed to the mthd", () => {
+      //we expect this fxn to be called
+      it("calls `Wallet.calculateBalance`", () => {
+        const calculateBalanceMock = jest.fn();
+
+        const originalCalculateBalance = Wallet.calculateBalance; //save whatever the W.cB mthd is currently set to
+
+        Wallet.calculateBalance = calculateBalanceMock;
+
+        wallet.createTransaction({
+          recipient: "ash",
+          amount: 20,
+          chain: new Blockchain().chain,
+        });
+
+        expect(calculateBalanceMock).toHaveBeenCalled();
+
+        //restore W.cB() mthd to its original cB() fxn once we're done with this test
+        Wallet.calculateBalance = originalCalculateBalance;
+      });
+    });
   });
 
   describe("calculateBalance()", () => {

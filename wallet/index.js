@@ -15,7 +15,15 @@ class Wallet {
     return this.keyPair.sign(cryptoHash(data));
   }
 
-  createTransaction({ recipient, amount }) {
+  createTransaction({ recipient, amount, chain }) {
+    //as long a the chain is passed this.balance will be based on the BC history of that wallet
+    if (chain) {
+      this.balance = Wallet.calculateBalance({
+        chain,
+        address: this.publicKey,
+      });
+    }
+
     if (amount > this.balance) {
       throw new Error("Amount exceeds the wallet balance");
     }
