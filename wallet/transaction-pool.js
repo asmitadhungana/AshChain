@@ -36,7 +36,7 @@ class TransactionPool {
     this.transactionMap = {};
   }
 
-  //since all the transactions stored locally in the trnxn-pool of other nodes shouldn't be cleared
+  //since all the transactions stored locally in the trnxn-pool of same/other nodes shouldn't be cleared
   clearBlockchainTransactions({ chain }) {
     //check wheather certain transactions have been recorded in the BC
     for (let i = 1; i < chain.length; i++) {
