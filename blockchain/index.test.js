@@ -158,6 +158,19 @@ describe("Blockchain", () => {
         });
       });
     });
+
+    describe("and the `validateTransactions` flag is true", () => {
+      it("calls validTransactionData()", () => {
+        const validTransactionDataMock = jest.fn();
+
+        blockchain.validTransactionData = validTransactionDataMock;
+
+        newChain.addBlock({ data: "ash" });
+        blockchain.replaceChain(newChain.chain, true);
+
+        expect(validTransactionDataMock).toHaveBeenCalled();
+      });
+    });
   });
 
   describe("validTransactionData()", () => {
@@ -228,7 +241,7 @@ describe("Blockchain", () => {
 
     describe("and the transaction data has at least one malformed input", () => {
       it("returns false and logs an error", () => {
-        wallet.balance = 7000;
+        wallet.balance = 7000; //set to huge balance
 
         const evilOutputMap = {
           [wallet.publicKey]: 6900,
@@ -258,7 +271,7 @@ describe("Blockchain", () => {
       it("returns false and logs an error", () => {
         newChain.addBlock({
           data: [transaction, transaction, transaction, rewardTransaction],
-        });
+        }); //setting the same trnxn multiple times in the same block
 
         expect(blockchain.validTransactionData({ chain: newChain.chain })).toBe(
           false

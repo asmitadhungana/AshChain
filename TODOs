@@ -275,6 +275,92 @@ vid:6.12 bata continue
 
     [7.6] create a transaction-pool-map get enpoint in main/index.js
 
+    [7.9] status 200: success
+    [7.12] synced up the transaction-pool-map enpoint on connect
+    (any new peer added will automatically get synced up with the transaction-pool already existing in the BC)
+
+[[8]] MINE Transactions
+
+    [8.1] Mine Transactions:
+        =>the transaction miner will get the transactions from the transaction pool
+        => called MINERS because => they pay the costs of computational power and do the work to find a valid hash for a new block
+
+        =>MINING REWARD:
+            =>comes in the form of a special transaction
+            => that transaction only has a single output which will be for the miner's wallet w/ an official mining reward value
+            =>input value will be a unique transaction input as well 
+            => all the nodes have the ability to validate it
+
+            => WITHOUT the reward or the incentive, the blockchain growth will stagnate
+
+        =>FUNCTIONALITIES a miner needs to achieve to validate a block of Transactions
+        =>5 ACTIONS:
+            =>1. Grab all the valid transactions that are currently in the pool
+            =>2. Generate a miner's reward
+            =>3. Do the CPU work to find a valid hash
+            =>4. Broadcast the updated blockchain w/ the new block created
+            =>5. Clear the transaction pool now that the miner has already included the transaction data in the BC
+                [NOTE: Miner only needs to clear the pools of its own node and not the pools on the behalf of all the other BC instances] 
+        
+        =>MAKE: transaction-miner.js file in app
+
+    [8.4] Reward Transaction
+        => The REWARD_INPUT is set as a hardcoded value (takes only one argument, here, address)
+        =>It must fo through validation to make sure that a peer in the system cannot abuse or alter it
+
+        => added a new rewardTransaction() mthd in the Transaction class  
+
+    [8.6] Made /mine-transactions endpoint
+        => Added clearBlockchainTransactions() to clear the blockchain transactions that have successfully been mined using this endpoint in all the nodes in the blockchain
+
+    [8.7] Clear Recorded Transactions on Successful Replace
+        => added some fxnality to replaceChain(__, onSuccess)
+        => onSuceess() in pubsub.s insided replaceChain() is a callback fxn that clears clears the blockchain trnxns in transaction pool that have been mined succesfully
+
+    [8.8] BC balance overview
+        =>Calculate balance 
+            =>Balance = ntk of a wallet rather than 'net worth' of a wallet in cryptocurrency. 
+        =>Initially, everyone is going to start out with the same starting balance: 1000
+
+        =>we'll add an algo that will calculate the wallet's balance and figure out it balance at any point in the BC history
+
+        =>Overall mthd flow:
+            =>Scan the entire BC and the transaction history starting from the most recent block and going all the way to genesis block.
+            =>A wallet w/ no transactions still has the starting balance in it
+            =>A wallet that has actually made a transaction should have its balance whatever is the output of the transaction
+            =>Output reps the remaining balance after the trnxn
+
+            =>When a wallet is the recipient of one or more transactions:
+                =>it has even more value to its balance 
+                =>it gets to add any output amt sent to its adderess after its most recent transaction to its overall balance
+            
+            =>The balance of a wallet will always be the output of the most recent transaction done from it unwithstanding it's older transactions in the overall BC history
+
+    [8.13] Validate Transaction Blocks Overview
+        => 1. Each transaction must be correctly formatted
+        => 2. Only one mining reward per block
+        => 3. The block's input amt should be valid according to the blockchain history.
+        => 4. There cannot be multiple identical transactions in the same block
+
+    [8.12] Valid Transaction Data in the Blockchain
+
+        =>TWO types of trnxns:
+            => Reward trnxns
+            => Regular trnxns
+        =>Both need to be handled individually
+        
+    [8.16] Validate Input Balances
+        => Even when an evil trnxn is attempted to be submitted, we're gonna make sure that it doesn't pass the validTransactionData() mthd unless its input balance is actually matching what we have in out blockchain.
+
+
+         
+
+
+
+
+
+
+
 
 
 
