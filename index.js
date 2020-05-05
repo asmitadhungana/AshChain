@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const request = require("request");
+const path = require("path"); //frontend
 const Blockchain = require("./blockchain");
 const PubSub = require("./app/pubsub");
 const TransactionPool = require("./wallet/transaction-pool");
@@ -23,6 +24,7 @@ const DEFAULT_PORT = 3000;
 const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "client/dist"))); //middleware that allows us to serve the static files from a directory [frontend]
 
 app.get("/api/blocks", (req, res) => {
   res.json(blockchain.chain); //this'll send back the blockchain.chain in its json form to whoever makes the /api/block request
@@ -87,6 +89,12 @@ app.get("/api/wallet-info", (req, res) => {
     balance: Wallet.calculateBalance({ chain: blockchain.chain, address }),
   });
 });
+
+//for serving up the document
+//* means "any" endpoint | the backend will serve the frontend appn when it receives a request at any endpoint
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
+}); //dist is the build dir parcel-bundler will create for us
 
 //to sync the nodes in the ntk
 const syncWithRootState = () => {
