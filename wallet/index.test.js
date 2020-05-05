@@ -154,6 +154,74 @@ describe("Wallet class", () => {
             transactionTwo.outputMap[wallet.publicKey]
         );
       });
+
+      describe("and the wallet has made a transaction", () => {
+        let recentTransaction;
+
+        beforeEach(() => {
+          recentTransaction = wallet.createTransaction({
+            recipient: "ash-address",
+            amount: 15,
+          });
+
+          //add the recent trnxn to the BC as data arr within the block
+          blockchain.addBlock({ data: [recentTransaction] });
+        });
+
+        it("returns the output amount of the recent transaction", () => {
+          expect(
+            Wallet.calculateBalance({
+              chain: blockchain.chain,
+              address: wallet.publicKey,
+            })
+          ).toEqual(recentTransaction.outputMap[wallet.publicKey]);
+        });
+
+        describe("and there are outputs next to and after the recent transaction", () => {
+          //2 kinds of trnxns to consider : made in the same block and made in the next block
+          let sameBlockTransaction, nextBlockTransaction;
+
+          //set up a scenario for both the kinds
+          beforeEach(() => {
+            recentTransaction = wallet.createTransaction({
+              recipient: "later-ash-address",
+              amount: 30,
+            }); //wallet should create a trnxn that's recent
+
+            //trnxn to minerWallet happens in the same block
+            sameBlockTransaction = Transaction.rewardTransaction({
+              minerWallet: wallet,
+            });
+
+            //add a block consisting of both the recent and sameBlock trnxns
+            blockchain.addBlock({
+              data: [recentTransaction, sameBlockTransaction],
+            });
+
+            //afterwards it's receiving another trnxn in a subsequent block
+            nextBlockTransaction = new Wallet().createTransaction({
+              recipient: wallet.publicKey,
+              amount: 35,
+            }); //add this outputTotal gotten from receiving from this trnxn
+
+            //add a block consisting of this trnxn
+            blockchain.addBlock({ data: [nextBlockTransaction] });
+          });
+
+          it("includes the output amounts in the returned balance", () => {
+            expect(
+              Wallet.calculateBalance({
+                chain: blockchain.chain,
+                address: wallet.publicKey,
+              })
+            ).toEqual(
+              recentTransaction.outputMap[wallet.publicKey] +
+                sameBlockTransaction.outputMap[wallet.publicKey] +
+                nextBlockTransaction.outputMap[wallet.publicKey]
+            ); //overall blnc for this wallet should be the addn of all of its receiving values in all of these trnxns
+          });
+        });
+      });
     });
   });
 });

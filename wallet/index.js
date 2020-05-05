@@ -16,7 +16,7 @@ class Wallet {
   }
 
   createTransaction({ recipient, amount, chain }) {
-    //as long a the chain is passed this.balance will be based on the BC history of that wallet
+    //as long a the chain is passed this.balance will be based on the BC history of that
     if (chain) {
       this.balance = Wallet.calculateBalance({
         chain,
